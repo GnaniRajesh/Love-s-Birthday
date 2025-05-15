@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Love on Your Special Day</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollTrigger.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #ff69b4;
+            --secondary-color: #9370db;
+            --accent-color: #fffacd;
+            --text-color: #333;
+            --dark-accent: #b24c99;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--accent-color) 0%, #f8f8ff 100%);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        #header {
+            height: 100vh;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        
+        #header-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh; /* Makes it fill only the visible screen height */
+            background: url('images/Animated.webp') center center / contain no-repeat;
+            background-attachment: scroll; /* Fixed may cause issues on mobile */
+            z-index: 0;
+            background-size: cover; /* or 'cover' for fullscreen fit */
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        
+        
+        
+        header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: -1;
+        }
+        
+        .header-content {
+            color: white;
+            z-index: 2;
+            padding: 2rem;
+            max-width: 800px;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 300;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .tagline {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            font-weight: 300;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 28px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            margin: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .entrance-form {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            width: 90%;
+            margin: 0 auto;
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid var(--primary-color);
+            border-radius: 50px;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        input[type="text"]:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 10px rgba(147, 112, 219, 0.5);
+        }
+        
+        section {
+            padding: 5rem 2rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        
+        .memories {
+            background: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .memories-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        
+        .memory-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            transform: translateY(50px);
+            opacity: 0;
+        }
+        
+        .memory-card.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .memory-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        
+        .memory-card {
+            height: 700px;
+            width: 300px;        /* or 100% if inside a grid */
+            margin: 20px auto;   /* centers the card horizontally */
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .memory-img1 {
+            height: 300px;
+            width: 100%;
+            background: url('inbus.jpg') center center / cover no-repeat;
+        }
+        
+        
+        .memory-img2 {
+            width:100%;
+            height:300px;
+            background: url('videocall.jpg') center/cover;
+        }
+        .memory-img3 {
+            height: 300px;
+            width:100%;
+            background: url('Freshersday.jpg') center/cover;
+        }
+        .memory-img4 {
+            height: 200px;
+            background: url('/api/placeholder/400/200') center/cover;
+        }
+        .memory-img5 {
+            height: 200px;
+            background: url('/api/placeholder/400/200') center/cover;
+        }
+        .memory-img6 {
+            height: 200px;
+            background: url('/api/placeholder/400/200') center/cover;
+        }
+        
+        .memory-content {
+            padding: 1.5rem;
+        }
+        
+        .memory-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+        
+        .memory-date {
+            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--primary-color);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 70%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+            bottom: -10px;
+            left: 15%;
+        }
+        
+        .poem {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            text-align: center;
+        }
+        
+        .poem-text {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.2rem;
+            line-height: 2;
+            font-style: italic;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.5s ease;
+        }
+        
+        .poem-text.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .gifts {
+            background: var(--accent-color);
+        }
+        
+        .gifts-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            max-width: 1200px;
+        }
+        
+        .gift-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .gift-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .gift-img {
+            height: 200px;
+            background: url('/api/placeholder/300/200') center/cover;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .gift-img::before {
+            content: "Click to Select";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .gift-card:hover .gift-img::before {
+            opacity: 1;
+        }
+        
+        .gift-content {
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .gift-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+        
+        .gift-desc {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        .selected {
+            border: 3px solid var(--primary-color);
+            position: relative;
+        }
+        
+        .selected::after {
+            content: "✓";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .guestbook {
+            background: white;
+        }
+        
+        .guestbook-container {
+            max-width: 800px;
+            width: 100%;
+        }
+        
+        .guestbook-form {
+            margin-bottom: 3rem;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--primary-color);
+            border-radius: 10px;
+            resize: vertical;
+            min-height: 120px;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        textarea:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 10px rgba(147, 112, 219, 0.5);
+        }
+        
+        .message-list {
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 1rem;
+            background: #f9f9f9;
+            border-radius: 10px;
+        }
+        
+        .message {
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .message-author {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .message-date {
+            font-size: 0.8rem;
+            color: #999;
+        }
+        
+        .final {
+            background: url('/api/placeholder/1000/600') center/cover fixed;
+            position: relative;
+            z-index: 1;
+            color: white;
+            text-align: center;
+        }
+        
+        .final::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: -1;
+        }
+        
+        .final-content {
+            max-width: 800px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .final-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .final-text {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .heart {
+            display: inline-block;
+            font-size: 3rem;
+            animation: pulse 1.5s infinite;
+            margin: 0 0.5rem;
+            color: var(--primary-color);
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        .customization-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            width: 300px;
+            max-width: 90%;
+            transform: translateX(120%);
+            transition: transform 0.5s ease;
+        }
+        
+        .customization-panel.visible {
+            transform: translateX(0);
+        }
+        
+        .panel-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--primary-color);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+            transition: all 0.3s ease;
+        }
+        
+        .panel-toggle:hover {
+            transform: scale(1.1);
+        }
+        
+        .color-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+        
+        .color-preview {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            margin-right: 0.8rem;
+            border: 2px solid #ddd;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .color-preview:hover {
+            transform: scale(1.2);
+        }
+        
+        .panel-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+            text-align: center;
+        }
+        
+        .panel-section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .panel-section-title {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            color: #555;
+        }
+        
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+        
+        .floating-hearts.visible {
+            opacity: 1;
+        }
+        
+        .heart-particle {
+            position: absolute;
+            font-size: 20px;
+            animation: float 4s ease-in infinite;
+            color: var(--primary-color);
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        .countdown {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .nav-dots {
+            position: fixed;
+            top: 50%;
+            right: 30px;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            z-index: 100;
+        }
+        
+        .nav-dot {
+            width: 15px;
+            height: 15px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-dot.active {
+            background: var(--primary-color);
+            transform: scale(1.3);
+        }
+        
+        .music-control {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: var(--primary-color);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .music-control:hover {
+            transform: scale(1.1);
+        }
+        
+        .surprise-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        
+        .surprise-container.visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .surprise-content {
+            text-align: center;
+            color: white;
+            max-width: 800px;
+            padding: 2rem;
+        }
+        
+        .surprise-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: colorChange 3s infinite;
+        }
+        
+        @keyframes colorChange {
+            0% { color: var(--primary-color); }
+            33% { color: var(--secondary-color); }
+            66% { color: #00bcd4; }
+            100% { color: var(--primary-color); }
+        }
+        
+        .close-surprise {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .close-surprise:hover {
+            transform: rotate(90deg);
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .tagline {
+                font-size: 1.2rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .nav-dots {
+                right: 10px;
+            }
+            
+            .memory-card {
+                width: 100%;
+            }
+            
+            .final-title {
+                font-size: 2.5rem;
+            }
+        }
+        
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 1s ease;
+        }
+        
+        .loading-heart {
+            font-size: 5rem;
+            color: var(--primary-color);
+            animation: pulse 1s infinite;
+        }
+        
+        .loading-text {
+            position: absolute;
+            bottom: 30%;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen">
+        <div class="loading-heart">❤️</div>
+        <div class="loading-text">Loading your special surprise...</div>
+    </div>
+    
+    <!-- Entrance Form -->
+    <div class="entrance-form" id="entranceForm">
+        <h2>To My Special Someone</h2>
+        <p>Please enter your name to begin your personalized birthday experience</p>
+        <input type="text" id="nameInput" placeholder="Your Name">
+        <button class="btn" id="enterBtn">Enter</button>
+    </div>
+    
+    <!-- Main Content (Initially Hidden) -->
+    <div id="mainContent" style="display: none;">
+        <!-- Navigation Dots -->
+        <div class="nav-dots">
+            <div class="nav-dot active" data-section="header"></div>
+            <div class="nav-dot" data-section="memories"></div>
+            <div class="nav-dot" data-section="poem"></div>
+            <div class="nav-dot" data-section="gifts"></div>
+            <div class="nav-dot" data-section="guestbook"></div>
+            <div class="nav-dot" data-section="final"></div>
+        </div>
+        
+        <!-- Music Control -->
+        <div class="music-control" id="musicControl">♪</div>
+        
+        <!-- Customization Panel -->
+        <div class="panel-toggle" id="panelToggle">
+            <span>⚙️</span>
+        </div>
+        
+        <div class="customization-panel" id="customizationPanel">
+            <h3 class="panel-title">Customize Your Experience</h3>
+            
+            <div class="panel-section">
+                <h4 class="panel-section-title">Theme Colors</h4>
+                <div class="color-option">
+                    <div class="color-preview" style="background-color: #ff69b4;" data-color="#ff69b4" data-name="primary"></div>
+                    <span>Primary Color</span>
+                </div>
+                <div class="color-option">
+                    <div class="color-preview" style="background-color: #9370db;" data-color="#9370db" data-name="secondary"></div>
+                    <span>Secondary Color</span>
+                </div>
+                <div class="color-option">
+                    <div class="color-preview" style="background-color: #fffacd;" data-color="#fffacd" data-name="accent"></div>
+                    <span>Background Accent</span>
+                </div>
+            </div>
+            
+            <div class="panel-section">
+                <h4 class="panel-section-title">Favorite Flower</h4>
+                <select id="flowerSelect" class="form-select">
+                    <option value="roses">Roses</option>
+                    <option value="tulips">Tulips</option>
+                    <option value="lilies">Lilies</option>
+                    <option value="sunflowers">Sunflowers</option>
+                    <option value="orchids">Orchids</option>
+                </select>
+            </div>
+            
+            <button class="btn" id="saveCustomization">Save Changes</button>
+        </div>
+        
+        <!-- Floating Hearts Animation -->
+        <div class="floating-hearts" id="floatingHearts"></div>
+        
+        <!-- Header Section -->
+        <header id="header">
+            <div id="header-background"></div>
+            <div class="header-content">
+                <h1 class="animate__animated animate__fadeIn">Happy Birthday My Love <span id="recipientName">Darling</span>!</h1>
+                <p class="tagline animate__animated animate__fadeIn animate__delay-1s">A special celebration created just for you</p>
+                <div class="countdown" id="countdown">00:00:00</div>
+                <a href="#memories" class="btn animate__animated animate__bounceIn animate__delay-2s">Begin Your Journey</a>
+            </div>
+        </header>
+        
+        <!-- Memories Section -->
+        <section id="memories" class="memories">
+            <h2 class="section-title">Our Beautiful Memories</h2>
+            <div class="memories-container">
+                <div class="memory-card">
+                    <div class="memory-img1"></div>
+                    <div class="memory-content">
+                        <h3 class="memory-title">Our First Bus Pic</h3>
+                        <p class="memory-date">May 6th, 2024</p>
+                        <p>Remember when I Kissed you for the first time, i still remember the taste of your lips it was on 23rd March of 2024 , 
+                            after that when we were going home for holidays, we took pics like i was kissing on your forehead You were holding 
+                            my hand i felt a lot of butterlies in my stomach at the momemnt Nana.<br>"I love you a lot bujji"</p>
+                    </div>
+                </div>
+                
+                <div class="memory-card">
+                    <div class="memory-img2"></div>
+                    <div class="memory-content">
+                        <h3 class="memory-title">Our video Calls</h3>
+                        <p class="memory-date">Every Time i see you my girl</p>
+                        <p>whenever we are in video calls , you look like a little baby looking desperately staring at food, like you are my baby doll NANA.
+                            Assla Entha cute ga untav telusa boore buggala bujji bangaram <br> ummmmmmmmmmaaaaaaaahhhhhhhh.</p>
+                    </div>
+                </div>
+                
+                <div class="memory-card">
+                    <div class="memory-img3"></div>
+                    <div class="memory-content">
+                        <h3 class="memory-title">Freshers Day</h3>
+                        <p class="memory-date">September 3, 2024</p>
+                        <p>The first time maniddaram kalisi ey bhayam lekuda aaroju antha happy ga unam. if you remember it correctly
+                            current poyinapudu i kind of Hugged you nak aa moment chala baga nachindi nana, freshers ki prepare avthunapudu kooda aa mundu days we were all together 
+                            nak aa days malli osthey bagundu ani undi bujjammaa.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="memory-card">
+                    <div class="memory-img4"></div>
+                    <div class="memory-content">
+                        <h3 class="memory-title">Stargazing Night</h3>
+                        <p class="memory-date">October 20, 2023</p>
+                        <p>Laying on a blanket in the park, pointing out constellations and sharing our dreams for the future.</p>
+                    </div>
+                </div>
+                
+                <div class="memory-card">
+                    <div class="memory-img5"></div>
+                    <div class="memory-content">
+                        <h3 class="memory-title">Holiday Magic</h3>
+                        <p class="memory-date">December 25, 2023</p>
+                        <p>Our first holiday season together, decorating the tree and exchanging thoughtful gifts that showed how well we know each other.</p>
+                    </div>
+                </div>
+                
+                <div class="memory-card">
+                    <div class="memory-img6"></div>
+                    <div class="memory-content">
+                        <h3 class="memory-title">Midnight Dance</h3>
+                        <p class="memory-date">February 14, 2024</p>
+                        <p>Dancing in the living room at midnight, with only the soft glow of candles lighting our way.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Poem Section -->
+        <section id="poem" class="poem">
+            <h2 class="section-title">A Poem for You</h2>
+            <div class="poem-text">
+                <p>In the canvas of my life, you painted light,<br>
+                With gentle strokes of love, so pure and bright.<br>
+                Each day with you is a gift unwrapped,<br>
+                A treasure of moments, forever mapped.</p>
+                
+                <p>Your laughter is music to my willing ears,<br>
+                A symphony that chases away all fears.<br>
+                Your eyes hold galaxies I long to explore,<br>
+                With each glance, I fall in love more and more.</p>
+                
+                <p>Today we celebrate the day you came to be,<br>
+                The most precious gift this world gave to me.<br>
+                Happy Birthday, my love, my heart, my friend,<br>
+                May our journey together never end.</p>
+            </div>
+        </section>
+        
+        <!-- Virtual Gifts Section -->
+        <section id="gifts" class="gifts">
+            <h2 class="section-title">Choose Your Gift</h2>
+            <p style="text-align: center; margin-bottom: 2rem;">Click on a gift that speaks to your heart</p>
+            <div class="gifts-container">
+                <div class="gift-card" data-gift="spa">
+                    <div class="gift-img"></div>
+                    <div class="gift-content">
+                        <h3 class="gift-title">Spa Day</h3>
+                        <p class="gift-desc">A day of pampering and relaxation at your favorite spa. Includes massage, facial, and more!</p>
+                    </div>
+                </div>
+                
+                <div class="gift-card" data-gift="dinner">
+                    <div class="gift-img"></div>
+                    <div class="gift-content">
+                        <h3 class="gift-title">Romantic Dinner</h3>
+                        <p class="gift-desc">An exquisite dining experience at that restaurant you've been wanting to try.</p>
+                    </div>
+                </div>
+                
+                <div class="gift-card" data-gift="getaway">
+                    <div class="gift-img"></div>
+                    <div class="gift-content">
+                        <h3 class="gift-title">Weekend Getaway</h3>
+                        <p class="gift-desc">A surprise trip to a beautiful destination where we can create new memories together.</p>
+                    </div>
+                </div>
+                
+                <div class="gift-card" data-gift="jewelry">
+                    <div class="gift-img"></div>
+                    <div class="gift-content">
+                        <h3 class="gift-title">Special Jewelry</h3>
+                        <p class="gift-desc">A beautiful piece to remind you of our love every time you wear it.</p>
+                    </div>
+                </div>
+                
+                <div class="gift-card" data-gift="concert">
+                    <div class="gift-img"></div>
+                    <div class="gift-content">
+                        <h3 class="gift-title">Concert Tickets</h3>
+                        <p class="gift-desc">Tickets to see your favorite artist live in concert!</p>
+                    </div>
+                </div>
+                
+                <div class="gift-card" data-gift="custom">
+                    <div class="gift-img"></div>
+                    <div class="gift-content">
+                        <h3 class="gift-title">Your Choice</h3>
+                        <p class="gift-desc">Tell me what your heart desires, and I'll make it happen.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Guestbook Section -->
+        <section id="guestbook" class="guestbook">
+            <h2 class="section-title">Birthday Wishes</h2>
+            <div class="guestbook-container">
+                <div class="guestbook-form">
+                    <h3 style="margin-bottom: 1rem;">Leave a Birthday Wish</h3>
+                    <input type="text" id="wishAuthor" placeholder="Your Name">
+                    <textarea id="wishMessage" placeholder="Write your birthday wish here..."></textarea>
+                    <button class="btn" id="submitWish">Send Your Wish</button>
+                </div>
+                
+                <div class="message-list" id="messageList">
+                    <div class="message">
+                        <div class="message-author">Mom</div>
+                        <p>Happy birthday to the most wonderful daughter! May your day be filled with joy and laughter!</p>
+                        <div class="message-date">May 10, 2025</div>
+                    </div>
+                    
+                    <div class="message">
+                        <div class="message-author">Sarah (BFF)</div>
+                        <p>Happy birthday to my crazy, beautiful friend! Can't wait to celebrate with you this weekend!</p>
+                        <div class="message-date">May 11, 2025</div>
+                    </div>
+                    
+                    <div class="message">
+                        <div class="message-author">Mike</div>
+                        <p>Happy birthday! Wishing you all the best on your special day and throughout the coming year!</p>
+                        <div class="message-date">May 12, 2025</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Final Section -->
+        <section id="final" class="final">
+            <div class="final-content">
+                <h2 class="final-title">I Love You</h2>
+                <p class="final-text">Every moment with you is a gift. You make my world brighter, my smile wider, and my heart fuller. Thank you for being the incredible person that you are.</p>
+                <p class="final-text">Happy Birthday, my love!</p>
+                <div>
+                    <span class="heart">❤️</span>
+                    <span class="heart" style="animation-delay: 0.5s;">❤️</span>
+                    <span class="heart" style="animation-delay: 1s;">❤️</span>
+                </div>
+                <button class="btn" id="surpriseBtn">Click For Your Surprise</button>
+            </div>
+        </section>
+        
+        <!-- Surprise Modal -->
+        <div class="surprise-container" id="surpriseContainer">
+            <div class="close-surprise" id="closeSurprise">×</div>
+            <div class="surprise-content">
+                <h2 class="surprise-title">Will You...</h2>
+                <p style="font-size: 1.5rem; margin-bottom: 2rem;">Go on a special birthday adventure with me this weekend?</p>
+                <p style="font-size: 1.2rem; margin-bottom: 3rem;">I've planned something unforgettable for the most unforgettable person in my life.</p>
+                <div>
+                    <button class="btn" id="acceptSurprise">Yes, I'd Love To!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Loading Screen
+            setTimeout(function() {
+                document.querySelector('.loading-screen').style.opacity = '0';
+                setTimeout(function() {
+                    document.querySelector('.loading-screen').style.display = 'none';
+                }, 1000);
+            }, 2000);
+            
+            // Variables
+            const entranceForm = document.getElementById('entranceForm');
+            const mainContent = document.getElementById('mainContent');
+            const nameInput = document.getElementById('nameInput');
+            const enterBtn = document.getElementById('enterBtn');
+            const recipientName = document.getElementById('recipientName');
+            const panelToggle = document.getElementById('panelToggle');
+            const customizationPanel = document.getElementById('customizationPanel');
+            const saveCustomization = document.getElementById('saveCustomization');
+            const colorPreviews = document.querySelectorAll('.color-preview');
+            const flowerSelect = document.getElementById('flowerSelect');
+            const floatingHearts = document.getElementById('floatingHearts');
+            const navDots = document.querySelectorAll('.nav-dot');
+            const musicControl = document.getElementById('musicControl');
+            const countdown = document.getElementById('countdown');
+            const giftCards = document.querySelectorAll('.gift-card');
+            const wishAuthor = document.getElementById('wishAuthor');
+            const wishMessage = document.getElementById('wishMessage');
+            const submitWish = document.getElementById('submitWish');
+            const messageList = document.getElementById('messageList');
+            const surpriseBtn = document.getElementById('surpriseBtn');
+            const surpriseContainer = document.getElementById('surpriseContainer');
+            const closeSurprise = document.getElementById('closeSurprise');
+            const acceptSurprise = document.getElementById('acceptSurprise');
+            
+            // Audio element
+            const bgMusic = new Audio('https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js'); // This is just a placeholder, music can't actually play
+            bgMusic.loop = true;
+            let isMusicPlaying = false;
+            
+            // Enter Button Event
+            enterBtn.addEventListener('click', function() {
+                const name = nameInput.value.trim();
+                if (name) {
+                    recipientName.textContent = name;
+                    entranceForm.style.display = 'none';
+                    mainContent.style.display = 'block';
+                    
+                    // Start animations
+                    startFloatingHearts();
+                    
+                    // Initialize countdown
+                    updateCountdown();
+                    
+                    // Scroll to top
+                    window.scrollTo(0, 0);
+                    
+                    // Scroll triggers
+                    initScrollTriggers();
+                }
+            });
+            
+            // Panel Toggle
+            panelToggle.addEventListener('click', function() {
+                customizationPanel.classList.toggle('visible');
+            });
+            
+            // Save Customization
+            saveCustomization.addEventListener('click', function() {
+                customizationPanel.classList.remove('visible');
+                // Apply animation for feedback
+                panelToggle.classList.add('animate__animated', 'animate__rubberBand');
+                setTimeout(() => {
+                    panelToggle.classList.remove('animate__animated', 'animate__rubberBand');
+                }, 1000);
+            });
+            
+            // Color Previews
+            colorPreviews.forEach(preview => {
+                preview.addEventListener('click', function() {
+                    const colorPicker = document.createElement('input');
+                    colorPicker.type = 'color';
+                    colorPicker.value = this.dataset.color;
+                    colorPicker.click();
+                    
+                    colorPicker.addEventListener('input', function() {
+                        preview.style.backgroundColor = this.value;
+                        preview.dataset.color = this.value;
+                        document.documentElement.style.setProperty(`--${preview.dataset.name}-color`, this.value);
+                    });
+                });
+            });
+            
+            // Flower Selection
+            flowerSelect.addEventListener('change', function() {
+                // This would change flower imagery in a real implementation
+                console.log(`Selected flower: ${this.value}`);
+            });
+            
+            // Floating Hearts Animation
+            function startFloatingHearts() {
+                floatingHearts.classList.add('visible');
+                
+                // Create hearts periodically
+                setInterval(() => {
+                    createHeart();
+                }, 300);
+            }
+            
+            function createHeart() {
+                const heart = document.createElement('div');
+                heart.classList.add('heart-particle');
+                heart.innerHTML = '❤';
+                
+                // Random position and size
+                const left = Math.random() * 100;
+                const size = Math.random() * 30 + 10;
+                const duration = Math.random() * 3 + 2;
+                
+                heart.style.left = `${left}%`;
+                heart.style.bottom = '-20px';
+                heart.style.fontSize = `${size}px`;
+                heart.style.animationDuration = `${duration}s`;
+                
+                // Add to container
+                floatingHearts.appendChild(heart);
+                
+                // Remove after animation
+                setTimeout(() => {
+                    heart.remove();
+                }, duration * 1000);
+            }
+            
+            // Navigation Dots
+            navDots.forEach(dot => {
+                dot.addEventListener('click', function() {
+                    const section = this.dataset.section;
+                    document.getElementById(section).scrollIntoView({ behavior: 'smooth' });
+                });
+            });
+            
+            // Update active nav dot on scroll
+            window.addEventListener('scroll', function() {
+                const sections = ['header', 'memories', 'poem', 'gifts', 'guestbook', 'final'];
+                let current = '';
+                
+                sections.forEach(section => {
+                    const element = document.getElementById(section);
+                    const rect = element.getBoundingClientRect();
+                    
+                    if (rect.top <= 150 && rect.bottom >= 150) {
+                        current = section;
+                    }
+                });
+                
+                navDots.forEach(dot => {
+                    dot.classList.remove('active');
+                    if (dot.dataset.section === current) {
+                        dot.classList.add('active');
+                    }
+                });
+            });
+            
+            // Music Control
+            musicControl.addEventListener('click', function() {
+                if (isMusicPlaying) {
+                    bgMusic.pause();
+                    this.innerHTML = '♪';
+                } else {
+                    bgMusic.play().catch(e => console.log('Audio play failed:', e));
+                    this.innerHTML = '◼';
+                }
+                isMusicPlaying = !isMusicPlaying;
+            });
+            
+            // Countdown Timer
+            function updateCountdown() {
+                // Set target date (example: next 24 hours)
+                const now = new Date();
+                const target = new Date(now);
+                target.setDate(target.getDate() + 1);
+                
+                const interval = setInterval(() => {
+                    const now = new Date();
+                    const diff = target - now;
+                    
+                    if (diff <= 0) {
+                        clearInterval(interval);
+                        countdown.textContent = "It's Time!";
+                        return;
+                    }
+                    
+                    const hours = Math.floor(diff / (1000 * 60 * 60));
+                    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                    
+                    countdown.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                }, 1000);
+            }
+            
+            // Gift Selection
+            giftCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // Remove selected class from all cards
+                    giftCards.forEach(c => c.classList.remove('selected'));
+                    
+                    // Add selected class to clicked card
+                    this.classList.add('selected');
+                    
+                    // Show feedback
+                    const giftName = this.querySelector('.gift-title').textContent;
+                    alert(`You've selected: "${giftName}". Great choice!`);
+                });
+            });
+            
+            // Guestbook Submission
+            submitWish.addEventListener('click', function() {
+                const author = wishAuthor.value.trim();
+                const message = wishMessage.value.trim();
+                
+                if (author && message) {
+                    // Create new message element
+                    const newMessage = document.createElement('div');
+                    newMessage.classList.add('message', 'animate__animated', 'animate__fadeIn');
+                    
+                    // Current date
+                    const date = new Date();
+                    const dateStr = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+                    
+                    // Message HTML
+                    newMessage.innerHTML = `
+                        <div class="message-author">${author}</div>
+                        <p>${message}</p>
+                        <div class="message-date">${dateStr}</div>
+                    `;
+                    
+                    // Add to message list (prepend to show newest first)
+                    messageList.insertBefore(newMessage, messageList.firstChild);
+                    
+                    // Clear inputs
+                    wishAuthor.value = '';
+                    wishMessage.value = '';
+                    
+                    // Show feedback
+                    alert('Thank you for your lovely message!');
+                }
+            });
+            
+            // Surprise Button
+            surpriseBtn.addEventListener('click', function() {
+                surpriseContainer.classList.add('visible');
+            });
+            
+            // Close Surprise
+            closeSurprise.addEventListener('click', function() {
+                surpriseContainer.classList.remove('visible');
+            });
+            
+            // Accept Surprise
+            acceptSurprise.addEventListener('click', function() {
+                surpriseContainer.classList.remove('visible');
+                alert('Wonderful! I can\'t wait to share this special time with you! ❤️');
+            });
+            
+            // Scroll Trigger Animations
+            function initScrollTriggers() {
+                // Memory cards fade in when scrolled to
+                const memoryCards = document.querySelectorAll('.memory-card');
+                const observerOptions = {
+                    threshold: 0.2,
+                    rootMargin: '0px'
+                };
+                
+                const cardObserver = new IntersectionObserver(function(entries, observer) {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, observerOptions);
+                
+                memoryCards.forEach(card => {
+                    cardObserver.observe(card);
+                });
+                
+                // Poem text fade in
+                const poemText = document.querySelector('.poem-text');
+                const poemObserver = new IntersectionObserver(function(entries) {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            poemText.classList.add('visible');
+                            poemObserver.unobserve(poemText);
+                        }
+                    });
+                }, { threshold: 0.5 });
+                
+                poemObserver.observe(poemText);
+            }
+            
+            // Add smooth scroll for all anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
